@@ -1,0 +1,3 @@
+{"id":"song_recommendation_success","request":"推荐适合初学者的歌曲","minimumSources":2,"categories":[{"name":"推荐歌曲","minimumItems":1},{"name":"教学辅助","minimumItems":1}],"scenario":"ALL_SUCCESS","expectedStatus":"SUCCESS","expectedMinimumValidSources":2}
+{"id":"tutorial_partial_degraded","request":"搜索零基础气息教学视频","minimumSources":2,"categories":[{"name":"分步教学","minimumItems":1},{"name":"跟练示范","minimumItems":1}],"scenario":"SECOND_CATEGORY_FAILS","expectedStatus":"DEGRADED","expectedMinimumValidSources":1}
+{"id":"search_provider_failed","request":"调研换声区训练方法","minimumSources":2,"categories":[{"name":"专业解释","minimumItems":1}],"scenario":"SEARCH_FAILS","expectedStatus":"FAILED","expectedMinimumValidSources":0}

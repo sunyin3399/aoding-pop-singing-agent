@@ -1,0 +1,7 @@
+target
+.mvn
+mvnw
+mvnw.cmd
+src/test
+src/main/resources/application-local.yml
+src/main/resources/application-stress.yml

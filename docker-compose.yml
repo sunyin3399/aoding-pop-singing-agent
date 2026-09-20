@@ -1,0 +1,76 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aoding_agent}
+      POSTGRES_USER: ${POSTGRES_USER:-aoding}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aoding-local}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  searxng:
+    image: searxng/searxng:latest
+    environment:
+      SEARXNG_SECRET: ${SEARXNG_SECRET:-aoding-local-searxng-change-me}
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      PORT: 8102
+      AI_DASHSCOPE_API_KEY: ${AI_DASHSCOPE_API_KEY:?Set AI_DASHSCOPE_API_KEY in .env}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-qwen3-max}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-aoding_agent}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-aoding}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-aoding-local}
+      REDIS_DATABASE: 0
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD-}
+      SEARXNG_BASE_URL: http://searxng:8080
+      SEARCH_API_KEY: ${SEARCH_API_KEY-}
+      RAG_CANDIDATE_DIRECTORY: /app/data/knowledge-candidates
+      AUDIO_FFMPEG_EXECUTABLE: /usr/bin/ffmpeg
+    volumes:
+      - candidate-data:/app/data/knowledge-candidates
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      searxng:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  candidate-data:

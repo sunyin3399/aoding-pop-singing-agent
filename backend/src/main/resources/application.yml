@@ -1,0 +1,121 @@
+spring:
+  application:
+    name: aoding-agent
+  mvc:
+    async:
+      request-timeout: 600000
+  ai:
+    # ---- 聊天：走 DashScope 的 OpenAI 兼容接口（qwen3.x 新模型仅在此提供）----
+    openai:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+      # 聊天使用 DashScope OpenAI 兼容接口；具体 key 在 application-local.yml / application-prod.yml 注入
+      embedding:
+        # 聊天之外单独关闭 OpenAI embedding，避免与 DashScope embedding 重复注入
+        enabled: false
+    # ---- embedding/RAG：仍走 DashScope 原生，保证已存向量（1536 维）不变 ----
+    dashscope:
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      chat:
+        # DashScope 原生聊天接口路由不到 qwen3.x，改用上面的 OpenAI 兼容通道
+        enabled: false
+      embedding:
+        enabled: true
+    vectorstore:
+      pgvector:
+        # 开启应用启动时自动在数据库建表（vector_store）
+        initialize-schema: true
+        # 强烈建议使用 HNSW（分层导航小世界图）索引，而不是默认的 IVFFlat，查询速度快得多
+        index-type: HNSW
+        # 距离度量策略，推荐使用余弦相似度
+        # distance-type: COSINE
+        # 向量维度。如果你用的是阿里 Dashscope 的 text-embedding-v1 默认是 1536，v2/v3 可能是 1024。必须和你的模型输出对齐！
+        dimension: 1536
+  # 生效环境由环境变量决定，线上通过 SPRING_PROFILES_ACTIVE=prod 指定
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  session:
+    # store-type: redis
+    # 30 天过期
+    timeout: 2592000
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    # 具体地址、用户名、密码在 application-local.yml / application-prod.yml 注入
+  data:
+    redis:
+      # host、port、password 在 application-local.yml / application-prod.yml 注入
+      timeout: 5000
+  threads:
+    virtual:
+      enabled: true
+  # 文件上传
+  servlet:
+    multipart:
+      # 文件仍严格限制为 10 MiB；请求额外预留 1 MiB multipart 边界与头部空间。
+      max-file-size: 10MB
+      max-request-size: 11MB
+server:
+  # 本地/线上端口分别在 profile 配置中明确指定；FC prod 为 9000
+  port: ${PORT}
+  servlet:
+    context-path: /api
+
+search:
+  searxng:
+    base-url: ${SEARXNG_BASE_URL}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,threaddump,health
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.sunyin.aodingagent.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+app:
+  conversation:
+    # 完整会话用于前端恢复；模型只读取经过预算控制的上下文。
+    retention-days: 7
+    max-sessions-per-user-mode: 10
+    max-message-chars: 30000
+    profile-retention-days: 30
+    context:
+      max-history-tokens: 6000
+      compact-trigger-tokens: 6000
+      summary-target-tokens: 1000
+      recent-raw-turns: 3
+      recent-raw-token-budget: 4000
+      reference-token-budget: 500
+      max-history-messages: 16
+  rag:
+    # 待审核候选知识与正式向量库物理分离。
+    candidate-directory: ${RAG_CANDIDATE_DIRECTORY}
+    # Markdown 结构切分后再按 Token 切分，避免单块过大。
+    chunk-size: 500
+    min-chunk-size-chars: 200
+    # 只将达到阈值的最相关片段加入 Prompt。
+    top-k: 5
+    # 先扩大候选池，再在应用层记录分数、按阈值过滤，便于定位“无候选”与“被阈值过滤”。
+    candidate-top-k: 15
+    similarity-threshold: 0.55

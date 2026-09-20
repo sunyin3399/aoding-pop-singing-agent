@@ -1,0 +1,14 @@
+.git
+.env
+.idea
+.vscode
+**/target
+**/node_modules
+**/dist
+**/logs
+**/output
+**/tmp
+*.log
+**/application-local.yml
+**/application-stress.yml
+backend/src/test/resources/evaluation/private

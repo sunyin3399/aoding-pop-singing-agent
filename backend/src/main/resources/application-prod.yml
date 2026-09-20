@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: aoding-agent
+  ai:
+    dashscope:
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      embedding:
+        enabled: true
+    openai:
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  data:
+    redis:
+      database: ${REDIS_DATABASE}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+server:
+  port: ${PORT}
+search:
+  searxng:
+    base-url: ${SEARXNG_BASE_URL}
+app:
+  rag:
+    candidate-directory: ${RAG_CANDIDATE_DIRECTORY}
+search-api:
+  api-key: ${SEARCH_API_KEY}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+knife4j:
+  enable: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics

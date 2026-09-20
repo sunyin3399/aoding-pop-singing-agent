@@ -1,0 +1,22 @@
+.env
+.idea/
+.vscode/
+**/.DS_Store
+**/target/
+**/node_modules/
+**/dist/
+**/logs/
+**/output/
+**/tmp/
+*.log
+
+# Local/private Spring configuration
+**/application-local.yml
+**/application-stress.yml
+
+# Runtime data
+data/
+backend/src/test/resources/evaluation/private/
+**/.promotion-salt
+**/.scenario-salt
+**/.scenario-turns/

@@ -1,0 +1,25 @@
+{
+  "name": "aoding-agent-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node src/composables/useIdentity.test.js && node src/features/chat/scroll.test.js && node src/features/chat/markdown.test.js && node src/features/chat/references.test.js && node src/features/audio/audioWorkflow.test.js && node src/features/audio/audioContext.test.js && node src/components/HighNoteHighlights.test.js && node src/components/TrainingPlanChatCard.test.js && node src/features/pitch/pitchMath.test.js && node src/features/spectrum/spectrumMath.test.js && node src/features/trainingPlan/trainingPlan.test.js && node src/api/knowledgeReview.test.js && node src/views/SpectrumLabView.test.js && node src/views/TrainingPlanView.test.js && node src/views/KnowledgeReviewView.test.js && node src/views/HomeView.test.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.3.2",
+    "dompurify": "^3.2.6",
+    "element-plus": "2.7.8",
+    "marked": "^9.1.6",
+    "vue": "3.4.38",
+    "vue-router": "4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "4.6.2",
+    "jsdom": "^22.1.0",
+    "vite": "4.5.3"
+  }
+}
