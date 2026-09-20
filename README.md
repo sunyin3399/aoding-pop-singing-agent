@@ -1,8 +1,8 @@
 # Aoding Agent
 
-一个面向流行演唱学习的 AI 应用后端，一个应用 Java AI 工程能力的完整项目。
+一个面向流行演唱学习的全栈 AI 应用，一个展示 Java AI 工程实践的完整项目。
 
-本项目是基于真实“声乐爱好者教学”的垂直场景，完整实现了 Agent、RAG、工具调用、流式会话、音频分析、知识审核和离线评测等能力。
+本项目基于真实的“声乐爱好者教学”垂直场景，覆盖 Agent、RAG、工具调用、流式会话、音频分析、知识审核和离线评测等主要能力。
 同样地，经过定制化修改和二次开发，它也可以适配各个不同垂类领域。
 
 ## 适合谁
@@ -197,8 +197,8 @@ flowchart TB
 | SSE 与并发可靠性 | Reactor Flux、心跳、进程内断线重连、事件重放、取消、虚拟线程 | 已实现（单实例） |
 | Redis 与持久化 | 会话、用户画像和上下文存储                          | 已实现 |
 | 音频算法工程 | FFT、频谱、音高轨迹、发声行为分析                     | 已实现 |
-| AI 效果评测 | Golden Case、Recall@K、MRR、引用有效性         | 已实现，持续优化中 |
-| 安全与治理 | 候选知识审核、路径边界、上传限制、引用白名单                 | 部分实现，持续优化中 |
+| AI 效果评测 | Golden Case、Recall@K、MRR、引用有效性         | 已实现 |
+| 安全与治理 | 候选知识审核、路径边界、上传限制、引用白名单                 | 部分实现 |
 
 
 ## 技术栈
@@ -341,11 +341,13 @@ docker compose down -v
 
 ## 验证与评测
 
-不访问模型、网络、PostgreSQL 或 Redis 的训练计划评测：
+以下命令面向后端开发者，需要安装 JDK 21。Maven Wrapper 会在首次运行时下载 Maven 和项目依赖。
+
+运行不访问模型、网络、PostgreSQL 或 Redis 的训练计划评测：
 
 ```powershell
 cd backend
-.\mvnw.cmd -o -Dtest=TrainingPlanEvaluationTest test
+.\mvnw.cmd -Dtest=TrainingPlanEvaluationTest test
 ```
 
 报告输出到：
@@ -354,7 +356,7 @@ cd backend
 target/evaluation/training-plan-metrics.json
 ```
 
-运行完整测试：
+完整测试包含依赖模型、网络或基础设施的集成测试，运行前需要准备对应环境和配置：
 
 ```powershell
 cd backend
@@ -378,4 +380,4 @@ cd backend
 - `/api/admin/**` 尚未内置管理员身份认证，部署上线必须由网关或应用安全配置限制；
 - 音频分析用于训练辅助，不是医疗诊断或专业录音棚测量；
 - 评测结果用于回归和质量观察，不等同于线上真实用户效果或生产 SLA；
-- 模型、数据库、Redis 和搜索服务均属于外部运行依赖。
+- 模型调用需要用户提供自己的 API Key；本地演示所需的 PostgreSQL、Redis 和 SearXNG 由 Docker Compose 提供。
