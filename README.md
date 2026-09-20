@@ -366,7 +366,7 @@ cd backend
 
 ## 开源说明
 
-本项目以 MIT License 开源，主要用于展示 Java、Spring AI、RAG、Agent、音频分析和 Vue 前端的完整工程实践。你可以将其用于学习、研究和二次开发，具体授权范围以仓库中的 `LICENSE` 为准。
+本项目以 MIT License 开源，主要用于展示 Java、Spring AI、RAG、Agent、音频分析和 Vue 前端的完整工程实践。你可以将其用于学习和研究，具体授权范围以仓库中的 `LICENSE` 为准。
 
 仓库不包含任何可用的模型密钥或个人配置。运行项目前，请根据 `.env.example` 创建本地 `.env`，并填写自己的服务凭证。请勿将真实密钥提交到公开仓库。
 
