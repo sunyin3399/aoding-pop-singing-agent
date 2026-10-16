@@ -7,14 +7,14 @@
 
 ## 适合谁
 
-- 想了解 Java 项目如何落地 LLM 应用的人；
-- 想学习 Spring AI、RAG 和 Agent 工程实践的人；
-- 正在准备 AI 应用开发、AI Agent 或 Java 后端岗位的人；
+- 想了解 Java 项目如何结合 LLM 应用的人；
+- 关注 Spring AI、RAG 和 Agent 工程实践的人；
+- 关注 AI 应用开发、AI Agent 实际应用落地的人；
 - 关注流行演唱声乐教学、音频分析、领域知识库和 AI 产品工程化的人。
 
 ## 这个项目能帮你做什么？
 
-✅ 面试加分项：拥有一个真实完整的Agent项目，不再只是CRUD和背面试题
+✅ AI真实应用落地：一个基于真实教学场景的完整Agent，可直接用于社群内部
 
 ✅ 技术栈齐全：RAG全链路、Prompt 与上下文工程、ToolCalling、Agent记忆、Agent Eval一应俱全
 
@@ -29,6 +29,12 @@
 - 如何让 Agent 基于领域知识回答，而不是只依赖模型记忆；
 - 如何让 Agent 在长任务、复杂任务和取消场景下仍然可控；
 - 如何通过确定性校验和离线评测，优化Agent的回答质量，避免“看起来合理但实际上不可靠”的回答。
+
+## 项目展示
+![Entertainment](image-3.png)
+![Falsetto](image.png)
+![Analysis1](image-1.png)
+![Analysis2](image-2.png)
 
 ## 一次请求如何完成
 
@@ -123,7 +129,7 @@ flowchart TB
 - PGVector 保存和检索知识片段；
 - 相似度阈值过滤低相关内容；
 - 记录检索结果、使用的文档 ID 和引用信息；
-- 通过 Recall@K、MRR 等指标进行检索回归。
+- 通过 Recall\@K、MRR 等指标进行检索回归。
 
 ### 3. 候选知识审核
 
@@ -187,19 +193,17 @@ flowchart TB
 - RAG 是否召回正确文档；
 - 训练计划是否满足输入约束。
 
-
-| 方向 | 项目具体实现                                 | 状态 |
-| -- |----------------------------------------| --- |
-| Spring AI / 大模型调用 | ChatModel、Embedding、工具回调、上下文组装         | 已实现 |
-| Agent / ReAct / Tool Calling | Agent 循环、工具注册、工具输出限制、终止控制              | 已实现 |
-| RAG 全链路 | Markdown 切分、Embedding、PGVector、阈值过滤、引用 | 已实现 |
-| Prompt 与上下文工程 | 上下文预算、压缩、结构化输出、结果修复                    | 已实现 |
-| SSE 与并发可靠性 | Reactor Flux、心跳、进程内断线重连、事件重放、取消、虚拟线程 | 已实现（单实例） |
-| Redis 与持久化 | 会话、用户画像和上下文存储                          | 已实现 |
-| 音频算法工程 | FFT、频谱、音高轨迹、发声行为分析                     | 已实现 |
-| AI 效果评测 | Golden Case、Recall@K、MRR、引用有效性         | 已实现 |
-| 安全与治理 | 候选知识审核、路径边界、上传限制、引用白名单                 | 部分实现 |
-
+| 方向                           | 项目具体实现                                 | 状态       |
+| ---------------------------- | -------------------------------------- | -------- |
+| Spring AI / 大模型调用            | ChatModel、Embedding、工具回调、上下文组装         | 已实现      |
+| Agent / ReAct / Tool Calling | Agent 循环、工具注册、工具输出限制、终止控制              | 已实现      |
+| RAG 全链路                      | Markdown 切分、Embedding、PGVector、阈值过滤、引用 | 已实现      |
+| Prompt 与上下文工程                | 上下文预算、压缩、结构化输出、结果修复                    | 已实现      |
+| SSE 与并发可靠性                   | Reactor Flux、心跳、进程内断线重连、事件重放、取消、虚拟线程   | 已实现（单实例） |
+| Redis 与持久化                   | 会话、用户画像和上下文存储                          | 已实现      |
+| 音频算法工程                       | FFT、频谱、音高轨迹、发声行为分析                     | 已实现      |
+| AI 效果评测                      | Golden Case、Recall\@K、MRR、引用有效性        | 已实现      |
+| 安全与治理                        | 候选知识审核、路径边界、上传限制、引用白名单                 | 部分实现     |
 
 ## 技术栈
 
@@ -222,8 +226,8 @@ flowchart TB
 
 - Git（可选，也可以直接从 GitHub 下载 ZIP）；
 - Docker Desktop，并确保 Docker Engine 已启动；
-- 可用的阿里云百炼平台 DashScope API Key，官网：https://bailian.console.aliyun.com/；
-- 如需使用 SearchAPI 作为联网搜索回退，再准备 SearchAPI Key，官网：https://www.searchapi.io/。
+- 可用的阿里云百炼平台 DashScope API Key，官网：<https://bailian.console.aliyun.com/；>
+- 如需使用 SearchAPI 作为联网搜索回退，再准备 SearchAPI Key，官网：<https://www.searchapi.io/。>
 
 不需要在本机单独安装 JDK、Maven、Node.js、PostgreSQL、PGVector、Redis 或 SearXNG，Docker Compose 会统一创建和运行这些服务。
 
@@ -363,7 +367,6 @@ cd backend
 .\mvnw.cmd test
 ```
 
-
 ## 开源说明
 
 本项目以 MIT License 开源，主要用于展示 Java、Spring AI、RAG、Agent、音频分析和 Vue 前端的完整工程实践。你可以将其用于学习和研究，具体授权范围以仓库中的 `LICENSE` 为准。
@@ -381,3 +384,4 @@ cd backend
 - 音频分析用于训练辅助，不是医疗诊断或专业录音棚测量；
 - 评测结果用于回归和质量观察，不等同于线上真实用户效果或生产 SLA；
 - 模型调用需要用户提供自己的 API Key；本地演示所需的 PostgreSQL、Redis 和 SearXNG 由 Docker Compose 提供。
+
